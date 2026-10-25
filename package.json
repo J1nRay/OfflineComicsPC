@@ -1,0 +1,57 @@
+{
+  "name": "offline-comics",
+  "productName": "OfflineComics",
+  "version": "1.0.1",
+  "description": "本地离线漫画阅读器",
+  "author": "OfflineComics",
+  "main": "main.js",
+  "scripts": {
+    "dev": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win",
+    "dist:portable": "electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.offlinecomics.app",
+    "productName": "OfflineComics",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "lib/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "OfflineComics",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    }
+  },
+  "dependencies": {
+    "yauzl": "^3.2.0"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^25.1.8"
+  }
+}

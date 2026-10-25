@@ -1,0 +1,558 @@
+.reader {
+  position: fixed;
+  inset: var(--titlebar-h) 0 0 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--reader-bg);
+  color: #f1f2f6;
+}
+
+.reader[hidden] {
+  display: none !important;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body.fullscreen .titlebar {
+  display: none;
+}
+
+body.fullscreen .reader {
+  inset: 0;
+}
+
+.reader-surface {
+  position: absolute;
+  inset: 0;
+}
+
+.reader-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* ---------------- 顶部工具栏 ---------------- */
+.reader-top {
+  position: absolute;
+  z-index: 25;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 66px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+  background: linear-gradient(180deg, rgba(5, 6, 9, 0.82) 0%, rgba(5, 6, 9, 0.42) 55%, transparent 100%);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+}
+
+.reader-heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.reader-heading h1 {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+.reader-meta {
+  display: block;
+  margin-top: 1px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.reader-tools {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.reader-icon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: rgba(255, 255, 255, 0.72);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.reader-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.reader-icon .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.reader-icon.is-on {
+  color: var(--accent);
+  background: rgba(255, 107, 90, 0.12);
+}
+
+.reader-icon.is-on .icon {
+  fill: currentColor;
+}
+
+.reader .segmented {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.reader .segmented button {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.reader .segmented button.is-active {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  box-shadow: none;
+}
+
+/* ---------------- 底部工具栏 ---------------- */
+.reader-bottom {
+  position: absolute;
+  z-index: 25;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+  background: linear-gradient(0deg, rgba(5, 6, 9, 0.85) 0%, rgba(5, 6, 9, 0.4) 55%, transparent 100%);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+}
+
+.reader.ui-hidden .reader-top {
+  opacity: 0;
+  transform: translateY(-14px);
+  pointer-events: none;
+}
+
+.reader.ui-hidden .reader-bottom {
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+}
+
+.slider-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 80px;
+}
+
+.slider-wrap input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.page-jump {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.page-jump input {
+  width: 48px;
+  height: 30px;
+  padding: 0 4px;
+  text-align: center;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  font-size: 12.5px;
+  outline: none;
+}
+
+.page-jump input:focus {
+  border-color: var(--accent-line);
+}
+
+/* ---------------- 翻页视图 ---------------- */
+.flip-viewport {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.flip-viewport.can-scroll {
+  overflow: auto;
+}
+
+.flip-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-spread {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  transition: opacity 0.16s ease;
+  will-change: transform;
+}
+
+.flip-viewport.can-scroll .flip-frame {
+  height: auto;
+  min-height: 100%;
+}
+
+.flip-viewport.can-scroll .page-spread {
+  height: auto;
+  min-height: 100%;
+  align-items: flex-start;
+  padding: 22px 18px;
+}
+
+.page-spread.is-turning {
+  animation: pageTurn 0.2s ease;
+}
+
+@keyframes pageTurn {
+  from { opacity: 0.15; }
+  to { opacity: 1; }
+}
+
+.page-slot {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-slot img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: brightness(var(--reader-brightness, 1));
+}
+
+.flip-viewport[data-fit="height"] .page-slot img {
+  height: 100%;
+  width: auto;
+  max-width: none;
+  max-height: none;
+}
+
+.flip-viewport[data-fit="width"] .page-slot img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+}
+
+.flip-viewport[data-fit="original"] .page-slot img {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+}
+
+.page-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.page-loading.is-visible {
+  opacity: 1;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-top-color: var(--accent);
+  animation: spin 0.85s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.page-badge {
+  position: absolute;
+  z-index: 26;
+  left: 20px;
+  bottom: 84px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(8, 10, 14, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.reader.ui-hidden .page-badge {
+  opacity: 1;
+}
+
+.page-badge.is-off {
+  display: none;
+}
+
+.zoom-badge {
+  position: absolute;
+  z-index: 26;
+  right: 20px;
+  bottom: 84px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(8, 10, 14, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.zoom-badge.is-visible {
+  opacity: 1;
+}
+
+/* ---------------- 卷轴视图 ---------------- */
+.scroll-viewport {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 26px 0 84px;
+  scrollbar-width: thin;
+}
+
+.scroll-page {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto var(--page-gap, 8px);
+  min-height: 30vh;
+}
+
+.scroll-page img {
+  display: block;
+  width: min(100%, 940px);
+  height: auto;
+  max-width: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: brightness(var(--reader-brightness, 1));
+}
+
+.scroll-viewport.is-wide .scroll-page img {
+  width: 100%;
+  max-width: none;
+}
+
+/* ---------------- 抽屉与面板 ---------------- */
+.reader-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.reader-settings {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  background: rgba(13, 15, 20, 0.94);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.45);
+  animation: panelIn 0.2s ease both;
+  width: 344px;
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateX(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+.reader-settings header {
+  height: 58px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reader-settings h2 {
+  font-size: 13.5px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.settings-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px 28px;
+}
+
+.reader-settings .setting-group {
+  padding: 14px 14px 4px;
+  margin-bottom: 12px;
+  border-color: rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.028);
+}
+
+.reader-settings .setting-group h3 {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.reader-settings .setting-row {
+  padding: 11px 0;
+  gap: 14px;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.reader-settings .setting-label span {
+  color: #e9ebf1;
+  font-size: 12.8px;
+}
+
+.reader-settings .setting-label small {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+}
+
+.reader-settings select {
+  height: 34px;
+  padding: 0 32px 0 11px;
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aab1c0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6.5 9.5 12 15 17.5 9.5'/%3E%3C/svg%3E");
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #e9ebf1;
+  font-size: 12.5px;
+}
+
+.reader-settings select:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.reader-settings select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 90, 0.18);
+}
+
+.reader-settings select option {
+  background: #1b202b;
+  color: #e9ebf1;
+}
+
+.reader-settings .segmented {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.reader-settings .segmented button {
+  color: rgba(255, 255, 255, 0.5);
+  height: 27px;
+  padding: 0 9px;
+  font-size: 11.5px;
+}
+
+.reader-settings .segmented button.is-active {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  box-shadow: none;
+}
+
+.reader-settings .range-wrap em {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.reader-settings .switch span {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px 12px;
+  padding: 4px 0 16px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.shortcut-grid span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reader-settings kbd {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 缩放后的拖动 */
+.page-spread.is-zoomed {
+  transition: none;
+}
+
+.reader-stage.is-pannable {
+  cursor: grab;
+}
+
+.reader-stage.is-panning {
+  cursor: grabbing;
+}
+
+@media (max-width: 1180px) {
+  .reader-settings { width: 318px; }
+  .reader-heading h1 { font-size: 14px; }
+}

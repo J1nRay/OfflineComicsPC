@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' oc: data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <title>OfflineComics</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/library.css">
+  <link rel="stylesheet" href="./css/reader.css">
+</head>
+<body>
+<svg class="svg-sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-shelf" viewBox="0 0 24 24">
+    <path d="M4 5.2A2.2 2.2 0 0 1 6.2 3H19.5v18H6.2A2.2 2.2 0 0 1 4 18.8z"/>
+    <path d="M4 17.4h15.5"/><path d="M8.2 7.2h7.2"/>
+  </symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.9"/>
+  </symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24">
+    <path d="M7 4.6h10a1 1 0 0 1 1 1V20l-6-3.7L6 20V5.6a1 1 0 0 1 1-1z"/>
+  </symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24">
+    <path d="M4 7h7"/><path d="M15 7h5"/><circle cx="13" cy="7" r="2.2"/>
+    <path d="M4 17h5"/><path d="M13 17h7"/><circle cx="11" cy="17" r="2.2"/>
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="6.4"/><path d="M16 16l4 4"/>
+  </symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24">
+    <path d="M12 5v14M5 12h14"/>
+  </symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24">
+    <path d="M3.5 7.5A1.8 1.8 0 0 1 5.3 5.7h4l1.8 2.1h6.9a1.8 1.8 0 0 1 1.8 1.8v7.6a1.8 1.8 0 0 1-1.8 1.8H5.3a1.8 1.8 0 0 1-1.8-1.8z"/>
+    <path d="M12 11v5M9.5 13.5h5"/>
+  </symbol>
+  <symbol id="i-folder-plain" viewBox="0 0 24 24">
+    <path d="M3.5 7.5A1.8 1.8 0 0 1 5.3 5.7h4l1.8 2.1h6.9a1.8 1.8 0 0 1 1.8 1.8v7.6a1.8 1.8 0 0 1-1.8 1.8H5.3a1.8 1.8 0 0 1-1.8-1.8z"/>
+  </symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24">
+    <path d="M4.5 7.2h15v11.3a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5z"/>
+    <path d="M4.5 7.2V5.5A1.5 1.5 0 0 1 6 4h12a1.5 1.5 0 0 1 1.5 1.5v1.7"/>
+    <path d="M10.2 4v3.2M13.8 7.2v3.1M10.2 10.3v3.1M13.8 13.4v3.1"/>
+  </symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24">
+    <path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5V10h-5.4"/>
+  </symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24">
+    <path d="M14.5 5.5 8 12l6.5 6.5"/>
+  </symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24">
+    <path d="M9.5 5.5 16 12l-6.5 6.5"/>
+  </symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24">
+    <path d="M4.5 9V4.5H9M15 4.5h4.5V9M19.5 15v4.5H15M9 19.5H4.5V15"/>
+  </symbol>
+  <symbol id="i-close" viewBox="0 0 24 24">
+    <path d="M6 6l12 12M18 6L6 18"/>
+  </symbol>
+  <symbol id="i-min" viewBox="0 0 24 24">
+    <path d="M5 12h14"/>
+  </symbol>
+  <symbol id="i-max" viewBox="0 0 24 24">
+    <rect x="5.5" y="5.5" width="13" height="13" rx="1.4"/>
+  </symbol>
+  <symbol id="i-restore" viewBox="0 0 24 24">
+    <rect x="5" y="8" width="11" height="11" rx="1.4"/>
+    <path d="M8.5 5H18a1 1 0 0 1 1 1v9.5"/>
+  </symbol>
+  <symbol id="i-mode-flip" viewBox="0 0 24 24">
+    <path d="M11 5.5H5.6A1.6 1.6 0 0 0 4 7.1v9.8a1.6 1.6 0 0 0 1.6 1.6H11z"/>
+    <path d="M13 5.5h5.4A1.6 1.6 0 0 1 20 7.1v9.8a1.6 1.6 0 0 1-1.6 1.6H13z"/>
+  </symbol>
+  <symbol id="i-mode-scroll" viewBox="0 0 24 24">
+    <rect x="5.5" y="3.5" width="13" height="6" rx="1.4"/>
+    <rect x="5.5" y="12.5" width="13" height="3.2" rx="1.4"/>
+    <path d="M9.5 19.5h5"/>
+  </symbol>
+  <symbol id="i-zoom-in" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="6.2"/><path d="M16 16l4 4M11 8.4v5.2M8.4 11h5.2"/>
+  </symbol>
+  <symbol id="i-zoom-out" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="6.2"/><path d="M16 16l4 4M8.4 11h5.2"/>
+  </symbol>
+  <symbol id="i-help" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8.4"/><path d="M9.8 9.4a2.4 2.4 0 1 1 3.2 2.3c-.6.3-1 .9-1 1.6v.2"/>
+    <path d="M12 16.6h.01"/>
+  </symbol>
+  <symbol id="i-more" viewBox="0 0 24 24">
+    <circle cx="6.2" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="17.8" cy="12" r="1.3"/>
+  </symbol>
+</svg>
+
+<div class="app-shell" id="appShell">
+  <header class="titlebar">
+    <div class="titlebar-brand">
+      <span class="brand-mark">OC</span>
+      <span class="brand-name">OfflineComics</span>
+    </div>
+    <div class="titlebar-drag"></div>
+    <div class="window-actions">
+      <button class="win-btn" data-win="min" title="最小化"><svg class="icon"><use href="#i-min"/></svg></button>
+      <button class="win-btn" data-win="max" title="最大化"><svg class="icon" id="winMaxIcon"><use href="#i-max"/></svg></button>
+      <button class="win-btn is-close" data-win="close" title="关闭"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside class="sidebar">
+      <nav class="nav-list">
+        <button class="nav-item is-active" data-view="library">
+          <svg class="icon"><use href="#i-shelf"/></svg><span>书架</span>
+          <em class="nav-count" id="navCountAll">0</em>
+        </button>
+        <button class="nav-item" data-view="recent">
+          <svg class="icon"><use href="#i-clock"/></svg><span>最近阅读</span>
+        </button>
+        <button class="nav-item" data-view="bookmarks">
+          <svg class="icon"><use href="#i-bookmark"/></svg><span>书签</span>
+          <em class="nav-count" id="navCountBookmarks">0</em>
+        </button>
+      </nav>
+      <div class="sidebar-section">
+        <div class="sidebar-section-head">
+          <span>文件夹</span>
+          <button class="icon-btn" id="folderAdd" title="新建文件夹">
+            <svg class="icon"><use href="#i-plus"/></svg>
+          </button>
+        </div>
+        <p class="sidebar-empty" id="folderEmpty">还没有文件夹，点击 + 新建</p>
+        <nav class="nav-list folder-list" id="folderList"></nav>
+      </div>
+      <nav class="nav-list nav-bottom">
+        <button class="nav-item" data-view="settings">
+          <svg class="icon"><use href="#i-settings"/></svg><span>设置</span>
+        </button>
+      </nav>
+      <div class="sidebar-foot">
+        <button class="btn btn-primary btn-block" id="sidebarAdd">
+          <svg class="icon"><use href="#i-plus"/></svg><span>添加漫画</span>
+        </button>
+        <p class="sidebar-hint">支持文件夹、ZIP、CBZ</p>
+      </div>
+    </aside>
+
+    <main class="content" id="content">
+      <div class="view-root" id="viewRoot"></div>
+    </main>
+  </div>
+</div>
+
+<section class="reader" id="reader" hidden aria-hidden="true">
+  <div class="reader-surface" id="readerSurface">
+    <header class="reader-top" id="readerTop">
+      <button class="reader-icon" id="readerBack" title="返回书架 (Esc)">
+        <svg class="icon"><use href="#i-chevron-left"/></svg>
+      </button>
+      <div class="reader-heading">
+        <h1 id="readerTitle">漫画标题</h1>
+        <span id="readerMeta" class="reader-meta"></span>
+      </div>
+      <div class="reader-tools">
+        <div class="segmented" id="modeSwitch">
+          <button data-mode="flip" title="翻页阅读"><svg class="icon"><use href="#i-mode-flip"/></svg><span>翻页</span></button>
+          <button data-mode="scroll" title="卷轴阅读"><svg class="icon"><use href="#i-mode-scroll"/></svg><span>卷轴</span></button>
+        </div>
+        <button class="reader-icon" id="btnBookmark" title="书签 (B)"><svg class="icon"><use href="#i-bookmark"/></svg></button>
+        <button class="reader-icon" id="btnReaderSettings" title="阅读设置"><svg class="icon"><use href="#i-settings"/></svg></button>
+        <button class="reader-icon" id="btnFullscreen" title="全屏 (F)"><svg class="icon"><use href="#i-expand"/></svg></button>
+      </div>
+    </header>
+
+    <div class="reader-stage" id="readerStage">
+      <div class="flip-viewport" id="flipViewport">
+        <div class="flip-frame" id="flipFrame">
+          <div class="page-spread" id="pageSpread">
+            <div class="page-slot" id="slotA"><img id="imgA" alt="" draggable="false"></div>
+            <div class="page-slot" id="slotB" hidden><img id="imgB" alt="" draggable="false"></div>
+          </div>
+          <div class="page-loading" id="pageLoading"><span class="spinner"></span></div>
+        </div>
+        <div class="page-badge" id="pageBadge"></div>
+        <div class="zoom-badge" id="zoomBadge"></div>
+      </div>
+      <div class="scroll-viewport" id="scrollViewport" hidden></div>
+    </div>
+
+    <footer class="reader-bottom" id="readerBottom">
+      <button class="reader-icon" id="btnPrev" title="上一页 (←)">
+        <svg class="icon"><use href="#i-chevron-left"/></svg>
+      </button>
+      <div class="slider-wrap">
+        <input type="range" id="pageSlider" min="0" max="0" step="1" value="0" aria-label="阅读进度">
+      </div>
+      <div class="page-jump">
+        <input type="text" id="pageInput" inputmode="numeric" value="1" aria-label="跳到指定页">
+        <span>/</span><span id="pageTotalText">0</span>
+      </div>
+      <button class="reader-icon" id="btnNext" title="下一页 (→)">
+        <svg class="icon"><use href="#i-chevron-right"/></svg>
+      </button>
+    </footer>
+  </div>
+
+  <aside class="reader-settings" id="readerSettings" hidden>
+    <header>
+      <h2>阅读设置</h2>
+      <button class="reader-icon" id="readerSettingsClose"><svg class="icon"><use href="#i-close"/></svg></button>
+    </header>
+    <div class="settings-scroll">
+      <section class="setting-group">
+        <h3>翻页</h3>
+        <div class="setting-row">
+          <div class="setting-label"><span>阅读方向</span><small>日漫通常从右向左</small></div>
+          <div class="segmented small" data-rsetting="direction">
+            <button data-value="rtl">右 → 左</button>
+            <button data-value="ltr">左 → 右</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span>页面适配</span><small>翻页模式下图片的显示方式</small></div>
+          <select data-rsetting="fitMode">
+            <option value="height">适应高度</option>
+            <option value="page">整页显示</option>
+            <option value="width">适应宽度</option>
+            <option value="original">原始尺寸</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span>双页模式</span><small>宽屏下并排显示两页</small></div>
+          <label class="switch"><input type="checkbox" data-rsetting="doublePage"><span></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span>翻页动画</span><small>切换页面时的滑动效果</small></div>
+          <label class="switch"><input type="checkbox" data-rsetting="animation"><span></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span>预加载页数</span><small>提前缓存前后页</small></div>
+          <div class="range-wrap"><input type="range" min="0" max="5" step="1" data-rsetting="preloadPages"><em></em></div>
+        </div>
+      </section>
+
+      <section class="setting-group">
+        <h3>卷轴</h3>
+        <div class="setting-row">
+          <div class="setting-label"><span>页间距</span><small>上下两页间留白</small></div>
+          <div class="range-wrap"><input type="range" min="0" max="48" step="2" data-rsetting="pageGap"><em></em></div>
+        </div>
+      </section>
+
+      <section class="setting-group">
+        <h3>界面</h3>
+        <div class="setting-row">
+          <div class="setting-label"><span>自动隐藏工具栏</span><small>鼠标静止后隐藏，移动时恢复</small></div>
+          <label class="switch"><input type="checkbox" data-rsetting="autoHideToolbar"><span></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span>显示页码</span><small>在画面角落显示当前页码</small></div>
+          <label class="switch"><input type="checkbox" data-rsetting="showPageNumber"><span></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span>阅读背景</span><small>适合不同画面的底色</small></div>
+          <div class="swatches" data-rsetting="background">
+            <button data-value="ink" title="墨黑"></button>
+            <button data-value="graphite" title="深灰"></button>
+            <button data-value="sepia" title="暖棕"></button>
+            <button data-value="white" title="纯白"></button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span>画面亮度</span><small>调暗画面，减少夜间刺眼</small></div>
+          <div class="range-wrap"><input type="range" min="40" max="160" step="5" data-rsetting="brightness"><em></em></div>
+        </div>
+      </section>
+
+      <section class="setting-group">
+        <h3>快捷键</h3>
+        <div class="shortcut-grid">
+          <span><kbd>←</kbd><kbd>→</kbd> 翻页</span>
+          <span><kbd>空格</kbd> 下一页</span>
+          <span><kbd>B</kbd> 书签</span>
+          <span><kbd>M</kbd> 切换模式</span>
+          <span><kbd>F</kbd> 全屏</span>
+          <span><kbd>+</kbd><kbd>-</kbd> 缩放</span>
+          <span><kbd>Esc</kbd> 返回</span>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <div class="reader-scrim" id="readerScrim" hidden></div>
+</section>
+
+<div class="modal-root" id="modalRoot" hidden>
+  <div class="modal-scrim" data-action="close-modal"></div>
+  <div class="modal-card" id="modalCard" role="dialog" aria-modal="true"></div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<div class="drop-overlay" id="dropOverlay" hidden>
+  <div class="drop-card">
+    <svg class="icon"><use href="#i-folder"/></svg>
+    <h2>松开即可导入</h2>
+    <p>支持漫画文件夹、ZIP、CBZ</p>
+  </div>
+</div>
+
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>

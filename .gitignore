@@ -1,0 +1,11 @@
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+.screenshots/
+.trae-html-share-packages/
+
+# 本地调试数据
+.devdata/
+*.log
