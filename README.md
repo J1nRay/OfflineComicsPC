@@ -171,8 +171,7 @@ OfflineComics/
 ├─ package.json            依赖、脚本、electron-builder 配置
 ├─ package-lock.json
 ├─ build/
-│  ├─ icon.ico             应用/安装包图标（256×256，多尺寸）
-│  └─ book.ico             原始图标素材（256×175，不作为打包输入）
+│  └─ icon.ico             应用/安装包图标（256×256，多尺寸）
 ├─ src/                    渲染进程（无构建步骤）
 │  ├─ index.html           页面骨架、SVG 图标精灵、阅读器 DOM
 │  ├─ css/
